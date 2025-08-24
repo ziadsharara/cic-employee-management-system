@@ -42,10 +42,11 @@
             </Panel>
 
             <!-- ======================== BULK ACTION BUTTONS ======================== -->
-            <!-- Bulk Delete and Bulk Export Buttons for selected employees -->
+            <!-- Bulk Delete, Bulk Export to Excel, and Bulk Export to PDF Buttons for selected employees -->
             <Toolbar>
                 <Button text="Delete Selected" type="Reject" press=".onBulkDelete" tooltip="Delete selected employees" />
                 <Button text="Export Selected to Excel" icon="sap-icon://excel-attachment" press=".onBulkExportExcel" tooltip="Export selected employees to Excel" />
+                <Button text="Export Selected to PDF" icon="sap-icon://pdf-attachment" press=".onBulkExportPDF" tooltip="Export selected employees to PDF" />
             </Toolbar>
 
             <!-- Enhanced Employee Table with MultiSelect -->

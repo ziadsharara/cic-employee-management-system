@@ -403,6 +403,47 @@ sap.ui.define(
       },
 
       // ======================== END BULK OPERATIONS FEATURE ======================== //
+
+      // ======================== BULK EXPORT TO PDF FEATURE ======================== //
+      /**
+       * Exports selected employees to PDF using jsPDF and autoTable.
+       * Bulk Export to PDF: Exports only selected employees to PDF file.
+       */
+      onBulkExportPDF: function () {
+        var oTable = this.byId('employeeTable');
+        var aSelected = oTable.getSelectedItems();
+        if (!aSelected.length) {
+          MessageToast.show('No employees selected');
+          return;
+        }
+
+        var aData = aSelected.map((item) =>
+          item.getBindingContext().getObject()
+        );
+
+        sap.ui.require(
+          ['cic/cictrial/util/LibraryLoader'],
+          function (LibraryLoader) {
+            LibraryLoader.loadJsPDF().then(function () {
+              const { jsPDF } = window.jspdf;
+              var doc = new jsPDF();
+              doc.text('Selected Employee List', 14, 20);
+              doc.autoTable({
+                head: [['ID', 'Name', 'Department', 'Position', 'Email']],
+                body: aData.map((emp) => [
+                  emp.id,
+                  emp.name,
+                  emp.department,
+                  emp.position,
+                  emp.email,
+                ]),
+              });
+              doc.save('SelectedEmployees.pdf');
+            });
+          }
+        );
+      },
+      // ======================== END BULK EXPORT TO PDF FEATURE ======================== //
     });
   }
 );
