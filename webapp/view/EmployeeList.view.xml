@@ -53,9 +53,13 @@
                         <Title text="Employees ({=${/employees}.length})" level="H2"/>
                         <ToolbarSpacer />
                         <Button icon="sap-icon://excel-attachment" 
-                                text="Export" 
-                                press=".onExport"
+                                text="Export to Excel" 
+                                press=".onExportExcel"
                                 tooltip="Export to Excel" />
+                        <Button icon="sap-icon://pdf-attachment" 
+                                text="Export to PDF" 
+                                press=".onExportPDF"
+                                tooltip="Export to PDF" />
                         <Button icon="sap-icon://refresh" 
                                 press=".onRefresh"
                                 tooltip="Refresh Data" />

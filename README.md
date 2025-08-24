@@ -146,7 +146,6 @@ webapp/
 
 ### Phase 2: Enhanced Features 🚧
 
-- [ ] Advanced search and multi-field filters
 - [ ] Export to Excel/PDF
 - [ ] Bulk employee operations
 - [ ] Employee photo upload and avatar

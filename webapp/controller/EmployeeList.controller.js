@@ -5,8 +5,16 @@ sap.ui.define(
     'sap/ui/model/FilterOperator',
     'sap/m/MessageToast',
     'sap/m/MessageBox',
+    'sap/ui/export/Spreadsheet',
   ],
-  function (Controller, Filter, FilterOperator, MessageToast, MessageBox) {
+  function (
+    Controller,
+    Filter,
+    FilterOperator,
+    MessageToast,
+    MessageBox,
+    Spreadsheet
+  ) {
     'use strict';
 
     return Controller.extend('cic.cictrial.controller.EmployeeList', {
@@ -228,9 +236,78 @@ sap.ui.define(
         MessageToast.show('Data refreshed');
       },
 
-      /** Placeholder for export functionality */
-      onExport: function () {
-        MessageToast.show('Export functionality - Coming soon!');
+      /**
+       * Export employee table to Excel
+       */
+      onExportExcel: function () {
+        console.log('onExportExcel called');
+        var oTable = this.byId('employeeTable');
+        var aCols = [];
+        var aFields = [];
+
+        // Get columns
+        oTable.getColumns().forEach(function (col) {
+          aCols.push({
+            label: col.getHeader().getText(),
+            property: col.getSortProperty(),
+          });
+          aFields.push(col.getSortProperty());
+        });
+
+        var oModel = oTable.getModel();
+        var aData = oModel.getProperty('/employees');
+
+        var aExportData = aData.map(function (item) {
+          var obj = {};
+          aFields.forEach(function (field) {
+            obj[field] = item[field];
+          });
+          return obj;
+        });
+
+        var oSheet = new Spreadsheet({
+          workbook: { columns: aCols },
+          dataSource: aExportData,
+          fileName: 'Employees.xlsx',
+        });
+
+        oSheet.build().finally(function () {
+          oSheet.destroy();
+        });
+      },
+
+      onExportPDF: function () {
+        console.log('onExportPDF called');
+        var that = this;
+        sap.ui.require(
+          ['cic/cictrial/util/LibraryLoader'],
+          function (LibraryLoader) {
+            LibraryLoader.loadJsPDF().then(function () {
+              var oTable = that.byId('employeeTable');
+              var oModel = oTable.getModel();
+              var aData = oModel.getProperty('/employees');
+
+              var aColumns = oTable.getColumns().map(function (col) {
+                return {
+                  title: col.getHeader().getText(),
+                  dataKey: col.getSortProperty(),
+                };
+              });
+
+              const { jsPDF } = window.jspdf;
+              var doc = new jsPDF();
+
+              doc.autoTable({
+                head: [aColumns.map((col) => col.title)],
+                body: aData.map((item) =>
+                  aColumns.map((col) => item[col.dataKey])
+                ),
+              });
+
+              doc.save('Employees.pdf');
+            });
+          }
+        );
       },
 
       /** Log total employee count */
