@@ -57,28 +57,11 @@ A comprehensive employee directory application showcasing modern SAP Fiori devel
 3. **Start development server**
 
    ```bash
-   npm start
-   # or
-   ui5 serve --open
+   npm run serve
    ```
 
 4. **Access the application**
    - Open browser: `http://localhost:8080`
-
-## 📱 Application Flow
-
-```mermaid
-graph TD
-    A[Employee List] --> B[View Details]
-    A --> C[Add New Employee]
-    B --> D[Edit Employee]
-    B --> E[Delete Employee]
-    C --> F[Save New Employee]
-    D --> G[Update Employee]
-    F --> A
-    G --> A
-    E --> A
-```
 
 ## 🏗️ Project Structure
 
@@ -173,15 +156,6 @@ webapp/
 - [ ] Role-based access control
 - [ ] Audit trail and change history
 - [ ] SAP SuccessFactors integration
-
-## 🚀 Deployment
-
-### Development Environment
-
-```bash
-npm run build
-npm run serve
-```
 
 ## 👨‍💻 Author
 
