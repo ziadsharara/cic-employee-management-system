@@ -44,8 +44,8 @@ A comprehensive employee directory application showcasing modern SAP Fiori devel
 1. **Clone the repository**
 
    ```bash
-   git clone https://github.com/[username]/sap-fiori-employee-directory.git
-   cd sap-fiori-employee-directory
+   git clone https://github.com/ziadsharara/cic-employee-management-system.git
+   cd cic-employee-management-system
    ```
 
 2. **Install dependencies**
