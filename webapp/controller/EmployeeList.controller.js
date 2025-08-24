@@ -331,6 +331,78 @@ sap.ui.define(
             return 'None';
         }
       },
+
+      // ======================== BULK OPERATIONS FEATURE ======================== //
+
+      /**
+       * Deletes all selected employees from the table and updates the model.
+       * Bulk Delete: Deletes all selected employees from the table and model.
+       */
+      onBulkDelete: function () {
+        var oTable = this.byId('employeeTable');
+        var aSelected = oTable.getSelectedItems();
+        if (!aSelected.length) {
+          MessageToast.show('No employees selected');
+          return;
+        }
+
+        MessageBox.confirm(
+          `Are you sure you want to delete ${aSelected.length} employees?`,
+          {
+            onClose: (oAction) => {
+              if (oAction === MessageBox.Action.OK) {
+                var oModel = this.getOwnerComponent().getModel();
+                var aEmployees = oModel.getProperty('/employees') || [];
+
+                aSelected.forEach((row) => {
+                  var sId = row.getBindingContext().getProperty('id');
+                  var iIndex = aEmployees.findIndex((emp) => emp.id === sId);
+                  if (iIndex !== -1) aEmployees.splice(iIndex, 1);
+                });
+
+                oModel.setProperty('/employees', aEmployees);
+                MessageToast.show('Selected employees deleted');
+                this._updateEmployeeCount();
+              }
+            },
+          }
+        );
+      },
+
+      /**
+       * Exports selected employees to Excel using Spreadsheet library.
+       * Bulk Export to Excel: Exports only selected employees to Excel file.
+       */
+      onBulkExportExcel: function () {
+        var oTable = this.byId('employeeTable');
+        var aSelected = oTable.getSelectedItems();
+        if (!aSelected.length) {
+          MessageToast.show('No employees selected');
+          return;
+        }
+
+        var aData = aSelected.map((item) =>
+          item.getBindingContext().getObject()
+        );
+
+        var aCols = [
+          { label: 'ID', property: 'id' },
+          { label: 'Name', property: 'name' },
+          { label: 'Department', property: 'department' },
+          { label: 'Position', property: 'position' },
+          { label: 'Email', property: 'email' },
+        ];
+
+        var oSheet = new Spreadsheet({
+          workbook: { columns: aCols },
+          dataSource: aData,
+          fileName: 'SelectedEmployees.xlsx',
+        });
+
+        oSheet.build().finally(() => oSheet.destroy());
+      },
+
+      // ======================== END BULK OPERATIONS FEATURE ======================== //
     });
   }
 );
