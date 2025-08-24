@@ -1,11 +1,12 @@
+// This controller manages the Employee List view, including search, filter, navigation, and export functionality.
 sap.ui.define(
   [
-    'sap/ui/core/mvc/Controller',
-    'sap/ui/model/Filter',
-    'sap/ui/model/FilterOperator',
-    'sap/m/MessageToast',
-    'sap/m/MessageBox',
-    'sap/ui/export/Spreadsheet',
+    'sap/ui/core/mvc/Controller', // Base controller class
+    'sap/ui/model/Filter', // Used for filtering table data
+    'sap/ui/model/FilterOperator', // Operators for filter conditions
+    'sap/m/MessageToast', // For showing toast messages
+    'sap/m/MessageBox', // For showing confirmation dialogs
+    'sap/ui/export/Spreadsheet', // For exporting table data to Excel
   ],
   function (
     Controller,
@@ -19,9 +20,7 @@ sap.ui.define(
 
     return Controller.extend('cic.cictrial.controller.EmployeeList', {
       /**
-       * Initialize the controller
-       * - Loads the main model from the Component
-       * - Updates the employee count
+       * Controller initialization: loads the main model and updates employee count.
        */
       onInit: function () {
         var oModel = this.getOwnerComponent().getModel();
@@ -34,8 +33,7 @@ sap.ui.define(
       },
 
       /**
-       * Handles row press event and navigates to employee details view
-       * @param {sap.ui.base.Event} oEvent - Item press event
+       * Handles row press event and navigates to employee details view.
        */
       onItemPress: function (oEvent) {
         var sEmployeeId = oEvent
@@ -51,30 +49,29 @@ sap.ui.define(
         }
       },
 
-      /** Navigate to Add New Employee page */
+      /**
+       * Navigates to the Add New Employee page.
+       */
       onAddEmployee: function () {
         this.getOwnerComponent().getRouter().navTo('EmployeeCreate');
       },
 
       /**
-       * Live search event handler
-       * @param {sap.ui.base.Event} oEvent - LiveChange event
+       * Handles live search input for filtering employees.
        */
       onLiveSearch: function (oEvent) {
         this._applySearchFilter(oEvent.getParameter('newValue'));
       },
 
       /**
-       * Search event handler
-       * @param {sap.ui.base.Event} oEvent - Search event
+       * Handles search event for filtering employees.
        */
       onSearch: function (oEvent) {
         this._applySearchFilter(oEvent.getParameter('query'));
       },
 
       /**
-       * Apply search filter across multiple fields
-       * @param {string} sQuery - Search text
+       * Applies search filter across multiple fields in the employee table.
        */
       _applySearchFilter: function (sQuery) {
         var oTable = this.byId('employeeTable');
@@ -109,8 +106,7 @@ sap.ui.define(
       },
 
       /**
-       * Department filter change event
-       * @param {sap.ui.base.Event} oEvent
+       * Handles department filter change event.
        */
       onDepartmentFilter: function (oEvent) {
         this._applyFilters(
@@ -120,9 +116,7 @@ sap.ui.define(
       },
 
       /**
-       * Combine search + department filters
-       * @param {string} sSearchQuery
-       * @param {string} sDepartment
+       * Combines search and department filters for the employee table.
        */
       _applyFilters: function (sSearchQuery, sDepartment) {
         var oTable = this.byId('employeeTable');
@@ -154,7 +148,9 @@ sap.ui.define(
         this._toggleNoDataMessage(oBinding.getLength() === 0);
       },
 
-      /** Clear all filters */
+      /**
+       * Clears all filters from the employee table.
+       */
       onClearFilters: function () {
         this.byId('searchField').setValue('');
         this.byId('departmentFilter').setSelectedKey('');
@@ -164,8 +160,7 @@ sap.ui.define(
       },
 
       /**
-       * Show or hide no data message
-       * @param {boolean} bShow
+       * Shows or hides the no data message based on table content.
        */
       _toggleNoDataMessage: function (bShow) {
         this.byId('employeeTable').setVisible(!bShow);
@@ -173,8 +168,7 @@ sap.ui.define(
       },
 
       /**
-       * Navigate to Quick Edit page for selected employee
-       * @param {sap.ui.base.Event} oEvent
+       * Navigates to Quick Edit page for the selected employee.
        */
       onQuickEdit: function (oEvent) {
         var sEmployeeId = oEvent
@@ -191,8 +185,7 @@ sap.ui.define(
       },
 
       /**
-       * Delete employee from model with confirmation
-       * @param {sap.ui.base.Event} oEvent
+       * Deletes an employee from the model with confirmation.
        */
       onQuickDelete: function (oEvent) {
         var oContext = oEvent.getSource().getBindingContext();
@@ -213,8 +206,7 @@ sap.ui.define(
       },
 
       /**
-       * Remove employee from model and update view
-       * @param {string} sEmployeeId
+       * Removes an employee from the model and updates the view.
        */
       _deleteEmployeeFromList: function (sEmployeeId) {
         var oModel = this.getOwnerComponent().getModel();
@@ -229,7 +221,9 @@ sap.ui.define(
         }
       },
 
-      /** Refresh table data */
+      /**
+       * Refreshes the employee table data and clears filters.
+       */
       onRefresh: function () {
         this.getOwnerComponent().getModel().refresh();
         this.onClearFilters();
@@ -237,7 +231,7 @@ sap.ui.define(
       },
 
       /**
-       * Export employee table to Excel
+       * Exports the employee table to Excel using fixed column mapping.
        */
       onExportExcel: function () {
         var oTable = this.byId('employeeTable');
@@ -275,6 +269,9 @@ sap.ui.define(
         });
       },
 
+      /**
+       * Exports the employee table to PDF using fixed column mapping.
+       */
       onExportPDF: function () {
         var that = this;
         sap.ui.require(
@@ -307,7 +304,9 @@ sap.ui.define(
         );
       },
 
-      /** Log total employee count */
+      /**
+       * Logs the total employee count to the console.
+       */
       _updateEmployeeCount: function () {
         var aEmployees =
           this.getOwnerComponent().getModel().getProperty('/employees') || [];
@@ -315,9 +314,7 @@ sap.ui.define(
       },
 
       /**
-       * Format department state for UI indicator
-       * @param {string} sDepartment
-       * @returns {string} State (Success, Warning, Error, Information, None)
+       * Formats the department state for UI indicator.
        */
       formatDepartmentState: function (sDepartment) {
         switch (sDepartment) {
