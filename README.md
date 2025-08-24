@@ -147,7 +147,7 @@ webapp/
 ### Phase 2: Enhanced Features 🚧
 
 - [x] Export to Excel/PDF (Implemented: EmployeeList table can be exported to Excel and PDF)
-- [ ] Bulk employee operations
+- [x] Bulk employee operations
 - [ ] Employee photo upload and avatar
 - [ ] Table pagination and sorting
 
