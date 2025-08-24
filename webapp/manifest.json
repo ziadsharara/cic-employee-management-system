@@ -87,6 +87,11 @@
           "pattern": "create",
           "name": "EmployeeCreate",
           "target": "EmployeeCreate"
+        },
+        {
+          "pattern": "edit/{EmployeeID}",
+          "name": "EmployeeEdit",
+          "target": "EmployeeEdit"
         }
       ],
       "targets": {
@@ -101,10 +106,14 @@
           "viewLevel": 2
         },
         "EmployeeCreate": {
-          "viewName": "cic.cictrial.view.EmployeeCreate",
+          "viewName": "EmployeeCreate",
           "viewId": "EmployeeCreate",
-          "viewLevel": 2,
-          "viewType": "XML"
+          "viewLevel": 2
+        },
+        "EmployeeEdit": {
+          "viewName": "EmployeeEdit",
+          "viewId": "EmployeeEdit",
+          "viewLevel": 2
         }
       }
     },

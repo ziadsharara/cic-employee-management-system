@@ -10,8 +10,12 @@ sap.ui.define(
     'use strict';
 
     return Controller.extend('cic.cictrial.controller.EmployeeList', {
+      /**
+       * Initialize the controller
+       * - Loads the main model from the Component
+       * - Updates the employee count
+       */
       onInit: function () {
-        // Ensure model is available from component
         var oModel = this.getOwnerComponent().getModel();
         if (oModel) {
           console.log('Model loaded successfully:', oModel.getData());
@@ -22,74 +26,69 @@ sap.ui.define(
       },
 
       /**
-       * Navigate to employee details when row is pressed
-       * @param {object} oEvent - Press event
+       * Handles row press event and navigates to employee details view
+       * @param {sap.ui.base.Event} oEvent - Item press event
        */
       onItemPress: function (oEvent) {
         var sEmployeeId = oEvent
           .getSource()
           .getBindingContext()
           .getProperty('id');
-
         if (sEmployeeId) {
-          this.getOwnerComponent().getRouter().navTo('EmployeeDetail', {
-            EmployeeID: sEmployeeId,
-          });
+          this.getOwnerComponent()
+            .getRouter()
+            .navTo('EmployeeDetail', { EmployeeID: sEmployeeId });
         } else {
           MessageToast.show('Error: Employee ID not found');
         }
       },
 
-      /**
-       * Navigate to add new employee page
-       */
+      /** Navigate to Add New Employee page */
       onAddEmployee: function () {
         this.getOwnerComponent().getRouter().navTo('EmployeeCreate');
       },
 
       /**
-       * Live search functionality - filters as user types
-       * @param {object} oEvent - Live change event
+       * Live search event handler
+       * @param {sap.ui.base.Event} oEvent - LiveChange event
        */
       onLiveSearch: function (oEvent) {
-        var sQuery = oEvent.getParameter('newValue');
-        this._applySearchFilter(sQuery);
+        this._applySearchFilter(oEvent.getParameter('newValue'));
       },
 
       /**
-       * Search functionality - filters when user presses enter or search icon
-       * @param {object} oEvent - Search event
+       * Search event handler
+       * @param {sap.ui.base.Event} oEvent - Search event
        */
       onSearch: function (oEvent) {
-        var sQuery = oEvent.getParameter('query');
-        this._applySearchFilter(sQuery);
+        this._applySearchFilter(oEvent.getParameter('query'));
       },
 
       /**
-       * Apply search filter to the table
-       * @param {string} sQuery - Search query
+       * Apply search filter across multiple fields
+       * @param {string} sQuery - Search text
        */
       _applySearchFilter: function (sQuery) {
         var oTable = this.byId('employeeTable');
         var oBinding = oTable.getBinding('items');
         var aFilters = [];
 
-        if (sQuery && sQuery.length > 0) {
-          // Create filters for multiple fields
-          var oFilter = new Filter({
-            filters: [
-              new Filter('id', FilterOperator.Contains, sQuery),
-              new Filter('name', FilterOperator.Contains, sQuery),
-              new Filter('department', FilterOperator.Contains, sQuery),
-              new Filter('position', FilterOperator.Contains, sQuery),
-              new Filter('email', FilterOperator.Contains, sQuery),
-            ],
-            and: false, // OR logic - search in any field
-          });
-          aFilters.push(oFilter);
+        if (sQuery) {
+          aFilters.push(
+            new Filter({
+              filters: [
+                new Filter('id', FilterOperator.Contains, sQuery),
+                new Filter('name', FilterOperator.Contains, sQuery),
+                new Filter('department', FilterOperator.Contains, sQuery),
+                new Filter('position', FilterOperator.Contains, sQuery),
+                new Filter('email', FilterOperator.Contains, sQuery),
+              ],
+              and: false,
+            })
+          );
         }
 
-        // Add department filter if selected
+        // Department filter (if any)
         var sDepartment = this.byId('departmentFilter').getSelectedKey();
         if (sDepartment) {
           aFilters.push(
@@ -102,43 +101,41 @@ sap.ui.define(
       },
 
       /**
-       * Department filter change handler
-       * @param {object} oEvent - Selection change event
+       * Department filter change event
+       * @param {sap.ui.base.Event} oEvent
        */
       onDepartmentFilter: function (oEvent) {
-        var sDepartment = oEvent.getSource().getSelectedKey();
-        var sSearchQuery = this.byId('searchField').getValue();
-
-        // Apply both search and department filters
-        this._applyFilters(sSearchQuery, sDepartment);
+        this._applyFilters(
+          this.byId('searchField').getValue(),
+          oEvent.getSource().getSelectedKey()
+        );
       },
 
       /**
-       * Apply multiple filters combination
-       * @param {string} sSearchQuery - Search text
-       * @param {string} sDepartment - Selected department
+       * Combine search + department filters
+       * @param {string} sSearchQuery
+       * @param {string} sDepartment
        */
       _applyFilters: function (sSearchQuery, sDepartment) {
         var oTable = this.byId('employeeTable');
         var oBinding = oTable.getBinding('items');
         var aFilters = [];
 
-        // Search filter
-        if (sSearchQuery && sSearchQuery.length > 0) {
-          var oSearchFilter = new Filter({
-            filters: [
-              new Filter('id', FilterOperator.Contains, sSearchQuery),
-              new Filter('name', FilterOperator.Contains, sSearchQuery),
-              new Filter('department', FilterOperator.Contains, sSearchQuery),
-              new Filter('position', FilterOperator.Contains, sSearchQuery),
-              new Filter('email', FilterOperator.Contains, sSearchQuery),
-            ],
-            and: false,
-          });
-          aFilters.push(oSearchFilter);
+        if (sSearchQuery) {
+          aFilters.push(
+            new Filter({
+              filters: [
+                new Filter('id', FilterOperator.Contains, sSearchQuery),
+                new Filter('name', FilterOperator.Contains, sSearchQuery),
+                new Filter('department', FilterOperator.Contains, sSearchQuery),
+                new Filter('position', FilterOperator.Contains, sSearchQuery),
+                new Filter('email', FilterOperator.Contains, sSearchQuery),
+              ],
+              and: false,
+            })
+          );
         }
 
-        // Department filter
         if (sDepartment) {
           aFilters.push(
             new Filter('department', FilterOperator.EQ, sDepartment)
@@ -149,24 +146,18 @@ sap.ui.define(
         this._toggleNoDataMessage(oBinding.getLength() === 0);
       },
 
-      /**
-       * Clear all applied filters
-       */
+      /** Clear all filters */
       onClearFilters: function () {
         this.byId('searchField').setValue('');
         this.byId('departmentFilter').setSelectedKey('');
-
-        var oTable = this.byId('employeeTable');
-        var oBinding = oTable.getBinding('items');
-        oBinding.filter([]);
-
+        this.byId('employeeTable').getBinding('items').filter([]);
         this._toggleNoDataMessage(false);
         MessageToast.show('All filters cleared');
       },
 
       /**
-       * Toggle no data message visibility
-       * @param {boolean} bShow - Whether to show no data message
+       * Show or hide no data message
+       * @param {boolean} bShow
        */
       _toggleNoDataMessage: function (bShow) {
         this.byId('employeeTable').setVisible(!bShow);
@@ -174,34 +165,39 @@ sap.ui.define(
       },
 
       /**
-       * Quick edit functionality from table row
-       * @param {object} oEvent - Press event
+       * Navigate to Quick Edit page for selected employee
+       * @param {sap.ui.base.Event} oEvent
        */
       onQuickEdit: function (oEvent) {
-        var oContext = oEvent.getSource().getBindingContext();
-        var sEmployeeId = oContext.getProperty('id');
-
-        // Navigate to edit mode (we'll implement this next)
-        MessageToast.show('Quick Edit for ' + sEmployeeId + ' - Coming soon!');
+        var sEmployeeId = oEvent
+          .getSource()
+          .getBindingContext()
+          .getProperty('id');
+        if (sEmployeeId) {
+          this.getOwnerComponent()
+            .getRouter()
+            .navTo('EmployeeEdit', { EmployeeID: sEmployeeId });
+        } else {
+          MessageToast.show('Error: Employee ID not found');
+        }
       },
 
       /**
-       * Quick delete functionality from table row
-       * @param {object} oEvent - Press event
+       * Delete employee from model with confirmation
+       * @param {sap.ui.base.Event} oEvent
        */
       onQuickDelete: function (oEvent) {
         var oContext = oEvent.getSource().getBindingContext();
         var sEmployeeId = oContext.getProperty('id');
         var sEmployeeName = oContext.getProperty('name');
-        var that = this;
 
         MessageBox.confirm(
-          "Are you sure you want to delete employee '" + sEmployeeName + "'?",
+          `Are you sure you want to delete employee '${sEmployeeName}'?`,
           {
             title: 'Delete Employee',
-            onClose: function (oAction) {
+            onClose: (oAction) => {
               if (oAction === MessageBox.Action.OK) {
-                that._deleteEmployeeFromList(sEmployeeId);
+                this._deleteEmployeeFromList(sEmployeeId);
               }
             },
           }
@@ -209,16 +205,13 @@ sap.ui.define(
       },
 
       /**
-       * Delete employee from the main model
-       * @param {string} sEmployeeId - Employee ID to delete
+       * Remove employee from model and update view
+       * @param {string} sEmployeeId
        */
       _deleteEmployeeFromList: function (sEmployeeId) {
         var oModel = this.getOwnerComponent().getModel();
-        var aEmployees = oModel.getProperty('/employees');
-
-        var iIndex = aEmployees.findIndex(function (emp) {
-          return emp.id === sEmployeeId;
-        });
+        var aEmployees = oModel.getProperty('/employees') || [];
+        var iIndex = aEmployees.findIndex((emp) => emp.id === sEmployeeId);
 
         if (iIndex !== -1) {
           aEmployees.splice(iIndex, 1);
@@ -228,38 +221,29 @@ sap.ui.define(
         }
       },
 
-      /**
-       * Refresh data from model
-       */
+      /** Refresh table data */
       onRefresh: function () {
-        var oModel = this.getOwnerComponent().getModel();
-        oModel.refresh();
+        this.getOwnerComponent().getModel().refresh();
         this.onClearFilters();
         MessageToast.show('Data refreshed');
       },
 
-      /**
-       * Export functionality (placeholder for now)
-       */
+      /** Placeholder for export functionality */
       onExport: function () {
         MessageToast.show('Export functionality - Coming soon!');
       },
 
-      /**
-       * Update employee count in table title
-       */
+      /** Log total employee count */
       _updateEmployeeCount: function () {
-        var oModel = this.getOwnerComponent().getModel();
-        if (oModel) {
-          var aEmployees = oModel.getProperty('/employees') || [];
-          console.log('Total employees: ' + aEmployees.length);
-        }
+        var aEmployees =
+          this.getOwnerComponent().getModel().getProperty('/employees') || [];
+        console.log(`Total employees: ${aEmployees.length}`);
       },
 
       /**
-       * Format department state for ObjectStatus control
-       * @param {string} sDepartment - Department name
-       * @returns {string} State value for ObjectStatus
+       * Format department state for UI indicator
+       * @param {string} sDepartment
+       * @returns {string} State (Success, Warning, Error, Information, None)
        */
       formatDepartmentState: function (sDepartment) {
         switch (sDepartment) {

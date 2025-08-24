@@ -31,7 +31,6 @@ sap.ui.define(
        * Create main data model with enhanced employee data
        */
       _createMainDataModel: function () {
-        // Enhanced mock data with more fields
         var oData = {
           employees: [
             {
@@ -101,7 +100,6 @@ sap.ui.define(
             },
           ],
 
-          // Enhanced statistics
           statistics: {
             totalEmployees: 5,
             departmentCounts: {
@@ -118,9 +116,33 @@ sap.ui.define(
           },
         };
 
-        // Create JSONModel and share with all Views
         var oMainModel = new JSONModel(oData);
-        this.setModel(oMainModel); // Default model (no name)
+        this.setModel(oMainModel);
+      },
+
+      /**
+       * Get the main JSONModel
+       */
+      getMainModel: function () {
+        return this.getModel();
+      },
+
+      /**
+       * Update an employee in the model by ID
+       * @param {object} oUpdatedEmployee
+       */
+      updateEmployee: function (oUpdatedEmployee) {
+        var oModel = this.getMainModel();
+        var aEmployees = oModel.getProperty('/employees');
+
+        var iIndex = aEmployees.findIndex(
+          (emp) => emp.id === oUpdatedEmployee.id
+        );
+
+        if (iIndex !== -1) {
+          aEmployees[iIndex] = oUpdatedEmployee;
+          oModel.setProperty('/employees', aEmployees);
+        }
       },
     });
   }

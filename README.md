@@ -22,18 +22,19 @@ A comprehensive employee directory application showcasing modern SAP Fiori devel
 
 ## 🛠️ Technology Stack
 
-| Component | Technology |
-|-----------|------------|
-| **Framework** | SAP UI5 1.139+ |
-| **Architecture** | Model-View-Controller (MVC) |
-| **Data Binding** | Two-way data binding |
-| **Routing** | SAP UI5 Router |
-| **Styling** | SAP Fiori 3.0 Theme |
-| **Data Layer** | JSON Model (Mock) → OData V2 (Production) |
+| Component        | Technology                                |
+| ---------------- | ----------------------------------------- |
+| **Framework**    | SAP UI5 1.139+                            |
+| **Architecture** | Model-View-Controller (MVC)               |
+| **Data Binding** | Two-way data binding                      |
+| **Routing**      | SAP UI5 Router                            |
+| **Styling**      | SAP Fiori 3.0 Theme                       |
+| **Data Layer**   | JSON Model (Mock) → OData V2 (Production) |
 
 ## 🚀 Getting Started
 
 ### Prerequisites
+
 - Node.js (v16 or higher)
 - SAP UI5 CLI
 - Modern web browser
@@ -41,17 +42,20 @@ A comprehensive employee directory application showcasing modern SAP Fiori devel
 ### Installation & Setup
 
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/[username]/sap-fiori-employee-directory.git
    cd sap-fiori-employee-directory
    ```
 
 2. **Install dependencies**
+
    ```bash
    npm install
    ```
 
 3. **Start development server**
+
    ```bash
    npm start
    # or
@@ -106,6 +110,7 @@ webapp/
 ## 🎯 Business Features
 
 ### Employee Management
+
 - ✅ **List View**: Paginated table with search capabilities
 - ✅ **Detail View**: Comprehensive employee information display
 - ✅ **Create**: Form-based employee creation with validation
@@ -113,6 +118,7 @@ webapp/
 - ✅ **Delete**: Confirmation-based deletion with undo capability
 
 ### Data Validation
+
 - Required field validation
 - Email format validation
 - Duplicate ID prevention
@@ -121,99 +127,68 @@ webapp/
 ## 🔧 Development Guidelines
 
 ### Code Quality Standards
-- ESLint configuration for code consistency
-- JSDoc comments for all functions
-- Separation of concerns (MVC pattern)
-- Reusable components and utilities
+
+- ESLint and Prettier for code consistency
+- JSDoc comments for all functions and classes
+- Strict MVC separation: controllers, views, models
+- Reusable UI components and utility functions
+- Unit and integration tests for all business logic
 
 ### SAP Fiori Compliance
-- Responsive breakpoints
-- Accessibility (WCAG 2.1)
-- Performance optimizations
-- Design consistency
+
+- Responsive layouts for desktop, tablet, and mobile
+- Accessibility (WCAG 2.1) and keyboard navigation
+- Performance optimizations (lazy loading, efficient binding)
+- Consistent Fiori 3.0 design and theming
+- Internationalization (i18n) for all user-facing text
 
 ## 📊 Screenshots
 
-| Feature | Screenshot |
-|---------|------------|
-| Employee List | ![List View](docs/screenshots/employee-list.png) |
+| Feature          | Screenshot                                           |
+| ---------------- | ---------------------------------------------------- |
+| Employee List    | ![List View](docs/screenshots/employee-list.png)     |
 | Employee Details | ![Detail View](docs/screenshots/employee-detail.png) |
-| Create Employee | ![Create Form](docs/screenshots/employee-create.png) |
+| Create Employee  | ![Create Form](docs/screenshots/employee-create.png) |
 
 ## 🔄 Development Roadmap
 
 ### Phase 1: Core Features ✅
-- [x] Basic CRUD operations
-- [x] Responsive UI
-- [x] Form validation
-- [x] Routing setup
+
+- [x] Employee CRUD operations (list, view, create, edit, delete)
+- [x] Responsive UI and Fiori 3.0 theming
+- [x] Form validation and error handling
+- [x] Routing and navigation setup
 
 ### Phase 2: Enhanced Features 🚧
-- [ ] Advanced search and filters
-- [ ] Export functionality (Excel/PDF)
-- [ ] Bulk operations
-- [ ] Employee photo management
+
+- [ ] Advanced search and multi-field filters
+- [ ] Export to Excel/PDF
+- [ ] Bulk employee operations
+- [ ] Employee photo upload and avatar
+- [ ] Table pagination and sorting
 
 ### Phase 3: Enterprise Features 📋
-- [ ] OData V4 integration
+
+- [ ] OData V4 backend integration
 - [ ] Role-based access control
-- [ ] Audit trail
-- [ ] Integration with SAP SuccessFactors
-
-## 🧪 Testing
-
-```bash
-# Run unit tests
-npm test
-
-# Run integration tests
-npm run test:integration
-
-# Generate coverage report
-npm run test:coverage
-```
+- [ ] Audit trail and change history
+- [ ] SAP SuccessFactors integration
 
 ## 🚀 Deployment
 
 ### Development Environment
+
 ```bash
-npm run build:dev
+npm run build
+npm run serve
 ```
-
-### Production Build
-```bash
-npm run build:prod
-```
-
-### SAP Launchpad Integration
-```bash
-npm run deploy:launchpad
-```
-
-## 📈 Performance Metrics
-
-- **Initial Load**: < 2 seconds
-- **List Rendering**: < 500ms (1000 records)
-- **Form Validation**: Real-time (< 100ms)
-- **Bundle Size**: < 500KB (gzipped)
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit changes (`git commit -m 'Add amazing feature'`)
-4. Push to branch (`git push origin feature/amazing-feature`)
-5. Open Pull Request
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 👨‍💻 Author
 
-**[Your Name]** - *SAP Fiori Developer*
-- LinkedIn: [Your Profile]
-- Email: your.email@company.com
+**CIC Fiori Team** - _SAP Fiori Developers_
+
+- LinkedIn: [Linkedin Profile](https://www.linkedin.com/in/ziadsharara/)
+- Email: ziad.shararaa@gmail.com
 
 ## 🙏 Acknowledgments
 
