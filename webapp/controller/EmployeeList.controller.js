@@ -240,29 +240,28 @@ sap.ui.define(
        * Export employee table to Excel
        */
       onExportExcel: function () {
-        console.log('onExportExcel called');
         var oTable = this.byId('employeeTable');
-        var aCols = [];
-        var aFields = [];
-
-        // Get columns
-        oTable.getColumns().forEach(function (col) {
-          aCols.push({
-            label: col.getHeader().getText(),
-            property: col.getSortProperty(),
-          });
-          aFields.push(col.getSortProperty());
-        });
-
         var oModel = oTable.getModel();
         var aData = oModel.getProperty('/employees');
+        console.log('Excel Export Data:', aData);
+
+        var aCols = [
+          { label: 'ID', property: 'id' },
+          { label: 'Name', property: 'name' },
+          { label: 'Department', property: 'department' },
+          { label: 'Position', property: 'position' },
+          { label: 'Email', property: 'email' },
+        ];
+        var aFields = ['id', 'name', 'department', 'position', 'email'];
 
         var aExportData = aData.map(function (item) {
-          var obj = {};
-          aFields.forEach(function (field) {
-            obj[field] = item[field];
-          });
-          return obj;
+          return {
+            id: item.id,
+            name: item.name,
+            department: item.department,
+            position: item.position,
+            email: item.email,
+          };
         });
 
         var oSheet = new Spreadsheet({
@@ -277,7 +276,6 @@ sap.ui.define(
       },
 
       onExportPDF: function () {
-        console.log('onExportPDF called');
         var that = this;
         sap.ui.require(
           ['cic/cictrial/util/LibraryLoader'],
@@ -286,22 +284,21 @@ sap.ui.define(
               var oTable = that.byId('employeeTable');
               var oModel = oTable.getModel();
               var aData = oModel.getProperty('/employees');
-
-              var aColumns = oTable.getColumns().map(function (col) {
-                return {
-                  title: col.getHeader().getText(),
-                  dataKey: col.getSortProperty(),
-                };
-              });
+              console.log('PDF Export Data:', aData);
 
               const { jsPDF } = window.jspdf;
               var doc = new jsPDF();
+              doc.text('Employee List', 14, 20);
 
               doc.autoTable({
-                head: [aColumns.map((col) => col.title)],
-                body: aData.map((item) =>
-                  aColumns.map((col) => item[col.dataKey])
-                ),
+                head: [['ID', 'Name', 'Department', 'Position', 'Email']],
+                body: aData.map((emp) => [
+                  emp.id,
+                  emp.name,
+                  emp.department,
+                  emp.position,
+                  emp.email,
+                ]),
               });
 
               doc.save('Employees.pdf');
