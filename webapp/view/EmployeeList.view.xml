@@ -1,0 +1,40 @@
+<mvc:View
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    controllerName="cic.cictrial.controller.EmployeeList">
+
+    <Page title="Employee Directory">
+        <headerContent>
+            <Button icon="sap-icon://add" text="Add Employee" press=".onAddEmployee" />
+        </headerContent>
+        <content>
+            <Table id="employeeTable" inset="false" items="{/employees}">
+                <headerToolbar>
+                    <Toolbar>
+                        <Title text="Employees" level="H2"/>
+                    </Toolbar>
+                </headerToolbar>
+                <columns>
+                    <Column>
+                        <Text text="ID"/>
+                    </Column>
+                    <Column>
+                        <Text text="Name"/>
+                    </Column>
+                    <Column>
+                        <Text text="Department"/>
+                    </Column>
+                </columns>
+                <items>
+                    <ColumnListItem type="Navigation" press=".onItemPress">
+                        <cells>
+                            <Text text="{id}" />
+                            <Text text="{name}" />
+                            <Text text="{department}" />
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+        </content>
+    </Page>
+</mvc:View>
