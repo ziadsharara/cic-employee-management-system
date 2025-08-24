@@ -38,7 +38,8 @@
       "minUI5Version": "1.139.0",
       "libs": {
         "sap.m": {},
-        "sap.ui.core": {}
+        "sap.ui.core": {},
+        "sap.ui.layout": {}
       }
     },
     "contentDensities": {
@@ -61,51 +62,52 @@
       ]
     },
     "routing": {
-  "config": {
-    "routerClass": "sap.m.routing.Router",
-    "controlId": "app",
-    "controlAggregation": "pages",
-    "transition": "slide",
-    "type": "View",
-    "viewType": "XML",
-    "viewPath": "cic.cictrial.view",
-    "async": true
-  },
-  "routes": [
-    {
-      "pattern": "",
-      "name": "EmployeeList",
-      "target": "EmployeeList"
+      "config": {
+        "routerClass": "sap.m.routing.Router",
+        "controlId": "app",
+        "controlAggregation": "pages",
+        "transition": "slide",
+        "type": "View",
+        "viewType": "XML",
+        "viewPath": "cic.cictrial.view",
+        "async": true
+      },
+      "routes": [
+        {
+          "pattern": "",
+          "name": "EmployeeList",
+          "target": "EmployeeList"
+        },
+        {
+          "pattern": "detail/{EmployeeID}",
+          "name": "EmployeeDetail",
+          "target": "EmployeeDetail"
+        },
+        {
+          "pattern": "create",
+          "name": "EmployeeCreate",
+          "target": "EmployeeCreate"
+        }
+      ],
+      "targets": {
+        "EmployeeList": {
+          "viewName": "EmployeeList",
+          "viewId": "EmployeeList",
+          "viewLevel": 1
+        },
+        "EmployeeDetail": {
+          "viewName": "EmployeeDetail",
+          "viewId": "EmployeeDetail",
+          "viewLevel": 2
+        },
+        "EmployeeCreate": {
+          "viewName": "cic.cictrial.view.EmployeeCreate",
+          "viewId": "EmployeeCreate",
+          "viewLevel": 2,
+          "viewType": "XML"
+        }
+      }
     },
-    {
-      "pattern": "detail/{EmployeeID}",
-      "name": "EmployeeDetail",
-      "target": "EmployeeDetail"
-    },
-    {
-      "pattern": "create",
-      "name": "EmployeeCreate",
-      "target": "EmployeeCreate"
-    }
-  ],
-  "targets": {
-    "EmployeeList": {
-      "viewName": "EmployeeList",
-      "viewId": "EmployeeList",
-      "viewLevel": 1
-    },
-    "EmployeeDetail": {
-      "viewName": "EmployeeDetail",
-      "viewId": "EmployeeDetail",
-      "viewLevel": 2
-    },
-    "EmployeeCreate": {
-      "viewName": "EmployeeCreate",
-      "viewId": "EmployeeCreate",
-      "viewLevel": 2
-    }
-  }
-},
     "rootView": {
       "viewName": "cic.cictrial.view.App",
       "type": "XML",

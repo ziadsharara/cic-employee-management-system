@@ -1,40 +1,126 @@
 <mvc:View
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m"
+    xmlns:core="sap.ui.core"
     controllerName="cic.cictrial.controller.EmployeeList">
 
     <Page title="Employee Directory">
         <headerContent>
-            <Button icon="sap-icon://add" text="Add Employee" press=".onAddEmployee" />
+            <Button icon="sap-icon://add" text="Add Employee" press=".onAddEmployee" type="Emphasized" />
         </headerContent>
+        
         <content>
-            <Table id="employeeTable" inset="false" items="{/employees}">
+            <!-- Search and Filter Panel -->
+            <Panel headerText="Search &amp; Filter" expanded="true" expandable="true" class="sapUiResponsiveMargin">
+                <content>
+                    <Toolbar>
+                        <SearchField id="searchField" 
+                            width="300px"
+                            placeholder="Search employees..." 
+                            search=".onSearch"
+                            liveChange=".onLiveSearch"/>
+                        <ToolbarSpacer />
+                        <Label text="Department:" />
+                        <Select id="departmentFilter" 
+                            width="150px"
+                            change=".onDepartmentFilter">
+                            <items>
+                                <core:Item key="" text="All Departments" />
+                                <core:Item key="IT" text="IT" />
+                                <core:Item key="HR" text="HR" />
+                                <core:Item key="Sales" text="Sales" />
+                                <core:Item key="Marketing" text="Marketing" />
+                                <core:Item key="Finance" text="Finance" />
+                                <core:Item key="Fiori" text="Fiori" />
+                            </items>
+                        </Select>
+                        <Button icon="sap-icon://clear-filter" 
+                            tooltip="Clear All Filters" 
+                            press=".onClearFilters" />
+                    </Toolbar>
+                </content>
+            </Panel>
+
+            <!-- Enhanced Employee Table -->
+            <Table id="employeeTable" 
+                   inset="false" 
+                   items="{/employees}"
+                   growing="true"
+                   growingThreshold="20"
+                   mode="SingleSelect">
                 <headerToolbar>
                     <Toolbar>
-                        <Title text="Employees" level="H2"/>
+                        <Title text="Employees ({=${/employees}.length})" level="H2"/>
+                        <ToolbarSpacer />
+                        <Button icon="sap-icon://excel-attachment" 
+                                text="Export" 
+                                press=".onExport"
+                                tooltip="Export to Excel" />
+                        <Button icon="sap-icon://refresh" 
+                                press=".onRefresh"
+                                tooltip="Refresh Data" />
                     </Toolbar>
                 </headerToolbar>
+                
                 <columns>
                     <Column>
-                        <Text text="ID"/>
+                        <Text text="Employee ID"/>
                     </Column>
                     <Column>
-                        <Text text="Name"/>
+                        <Text text="Full Name"/>
                     </Column>
                     <Column>
                         <Text text="Department"/>
                     </Column>
+                    <Column>
+                        <Text text="Position"/>
+                    </Column>
+                    <Column>
+                        <Text text="Email"/>
+                    </Column>
+                    <Column>
+                        <Text text="Actions"/>
+                    </Column>
                 </columns>
+                
                 <items>
                     <ColumnListItem type="Navigation" press=".onItemPress">
                         <cells>
-                            <Text text="{id}" />
+                            <ObjectIdentifier title="{id}" />
                             <Text text="{name}" />
-                            <Text text="{department}" />
+                            <ObjectStatus text="{department}" 
+                                         state="{path: 'department', formatter: '.formatDepartmentState'}" />
+                            <Text text="{position}" />
+                            <Link text="{email}" 
+                                  href="mailto:{email}"
+                                  enabled="{= ${email} !== '' }" />
+                            <HBox>
+                                <Button icon="sap-icon://edit" 
+                                        type="Transparent" 
+                                        press=".onQuickEdit"
+                                        tooltip="Quick Edit" />
+                                <Button icon="sap-icon://delete" 
+                                        type="Transparent" 
+                                        press=".onQuickDelete"
+                                        tooltip="Delete Employee" />
+                            </HBox>
                         </cells>
                     </ColumnListItem>
                 </items>
             </Table>
+
+            <!-- No Data Illustration -->
+            <IllustratedMessage id="noDataMessage"
+                               illustrationType="sapIllus-EmptyList"
+                               title="No Employees Found"
+                               description="Try adjusting your search or filter criteria"
+                               visible="false">
+                <additionalContent>
+                    <Button text="Add First Employee" 
+                           press=".onAddEmployee" 
+                           type="Emphasized" />
+                </additionalContent>
+            </IllustratedMessage>
         </content>
     </Page>
 </mvc:View>

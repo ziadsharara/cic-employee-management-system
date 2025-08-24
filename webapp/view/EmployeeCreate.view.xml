@@ -1,0 +1,100 @@
+<mvc:View
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:form="sap.ui.layout.form"
+    xmlns:core="sap.ui.core"
+    controllerName="cic.cictrial.controller.EmployeeCreate">
+
+    <Page title="Add New Employee" showNavButton="true" navButtonPress=".onNavBack">
+        
+        <!-- Header Actions -->
+        <headerContent>
+            <Button text="Save" press=".onSave" type="Emphasized" />
+            <Button text="Cancel" press=".onNavBack" />
+        </headerContent>
+
+        <content>
+            <!-- Employee Creation Form -->
+            <Panel headerText="Employee Information" class="sapUiResponsiveMargin">
+                <content>
+                    <form:SimpleForm 
+                        editable="true"
+                        layout="ResponsiveGridLayout"
+                        labelSpanL="3" 
+                        labelSpanM="3" 
+                        emptySpanL="4" 
+                        emptySpanM="4"
+                        columnsL="1" 
+                        columnsM="1">
+                        
+                        <form:content>
+                            <!-- Employee ID -->
+                            <Label text="Employee ID:" required="true" />
+                            <Input 
+                                id="employeeIdInput"
+                                value="{/id}" 
+                                placeholder="Enter Employee ID (e.g., E005)"
+                                valueState="{/idState}"
+                                valueStateText="{/idStateText}"
+                                liveChange=".onInputChange"/>
+                            
+                            <!-- Full Name -->
+                            <Label text="Full Name:" required="true" />
+                            <Input 
+                                id="employeeNameInput"
+                                value="{/name}" 
+                                placeholder="Enter full name"
+                                valueState="{/nameState}"
+                                valueStateText="{/nameStateText}"
+                                liveChange=".onInputChange"/>
+                            
+                            <!-- Department -->
+                            <Label text="Department:" required="true" />
+                            <Select 
+                                id="departmentSelect"
+                                selectedKey="{/department}"
+                                valueState="{/departmentState}"
+                                valueStateText="{/departmentStateText}"
+                                change=".onInputChange">
+                                <items>
+                                    <core:Item key="" text="Select Department" />
+                                    <core:Item key="IT" text="Information Technology" />
+                                    <core:Item key="HR" text="Human Resources" />
+                                    <core:Item key="Sales" text="Sales" />
+                                    <core:Item key="Marketing" text="Marketing" />
+                                    <core:Item key="Finance" text="Finance" />
+                                    <core:Item key="Fiori" text="Fiori Development" />
+                                </items>
+                            </Select>
+
+                            <!-- Position (Optional for now) -->
+                            <Label text="Position:" />
+                            <Input 
+                                id="positionInput"
+                                value="{/position}" 
+                                placeholder="Enter job position"/>
+
+                            <!-- Email (Optional for now) -->
+                            <Label text="Email:" />
+                            <Input 
+                                id="emailInput"
+                                value="{/email}" 
+                                placeholder="Enter email address"
+                                type="Email"/>
+                        </form:content>
+                    </form:SimpleForm>
+                </content>
+            </Panel>
+
+            <!-- Validation Messages Panel -->
+            <Panel headerText="Validation Messages" visible="{/hasValidationErrors}" class="sapUiResponsiveMargin">
+                <content>
+                    <MessageStrip 
+                        text="{/validationMessage}" 
+                        type="Error" 
+                        visible="{/hasValidationErrors}"/>
+                </content>
+            </Panel>
+        </content>
+    </Page>
+</mvc:View>
