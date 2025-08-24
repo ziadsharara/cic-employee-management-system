@@ -67,27 +67,29 @@ A comprehensive employee directory application showcasing modern SAP Fiori devel
 
 ```
 webapp/
-├── 📁 controller/          # MVC Controllers
+├── controller/          # MVC Controllers
 │   ├── App.controller.js
 │   ├── EmployeeList.controller.js
 │   ├── EmployeeDetail.controller.js
 │   └── EmployeeCreate.controller.js
-├── 📁 view/               # XML Views
+├── view/               # XML Views
 │   ├── App.view.xml
 │   ├── EmployeeList.view.xml
 │   ├── EmployeeDetail.view.xml
 │   └── EmployeeCreate.view.xml
-├── 📁 model/              # Business Logic & Models
+├── model/              # Business Logic & Models
 │   ├── models.js
-│   └── formatter.js
-├── 📁 i18n/               # Internationalization
+├── i18n/               # Internationalization
 │   └── i18n.properties
-├── 📁 localService/       # Mock Data (Development)
-│   ├── metadata.xml
-│   └── mockdata/
-├── 📄 Component.js        # Component Controller
-├── 📄 manifest.json       # App Descriptor
-└── 📄 index.html          # Entry Point
+├── css/                # Custom Styles
+│   └── style.css
+├── manifest.json       # App Descriptor
+├── Component.js        # Component Controller
+├── index.html          # Entry Point
+├── ui5.yaml            # UI5 Tooling Config
+├── ui5-local.yaml      # Local UI5 Tooling Config
+├── package.json        # NPM Config
+└── README.md           # Project Documentation
 ```
 
 ## 🎯 Business Features
