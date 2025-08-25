@@ -444,6 +444,22 @@ sap.ui.define(
         );
       },
       // ======================== END BULK EXPORT TO PDF FEATURE ======================== //
+
+      // ======================== TABLE SORTING FEATURE ======================== //
+      /**
+       * Handles sorting for employee table columns
+       * @param {object} oEvent - sort event from column header
+       */
+      onSort: function (oEvent) {
+        var oTable = this.byId('employeeTable');
+        var oBinding = oTable.getBinding('items');
+        var sSortProperty = oEvent.getSource().getSortProperty();
+        // Toggle sorting order (asc/desc)
+        var bDescending = oEvent.getSource().getSortOrder() === 'Descending';
+        var oSorter = new sap.ui.model.Sorter(sSortProperty, bDescending);
+        oBinding.sort(oSorter);
+      },
+      // ======================== END TABLE SORTING FEATURE ======================== //
     });
   }
 );

@@ -51,12 +51,12 @@
 
             <!-- Enhanced Employee Table with MultiSelect -->
             <Table id="employeeTable" 
-                   inset="false" 
                    items="{/employees}"
                    growing="true"
-                   growingThreshold="20"
-                   mode="MultiSelect"
-                   selectionMode="MultiToggle">
+                   growingScrollToLoad="true"
+                   growingThreshold="10"
+                   selectionMode="MultiSelect"
+                   mode="MultiSelect">
                 <headerToolbar>
                     <Toolbar>
                         <Title text="Employees ({=${/employees}.length})" level="H2"/>
@@ -76,19 +76,19 @@
                 </headerToolbar>
                 
                 <columns>
-                    <Column>
+                    <Column sortProperty="id">
                         <Text text="Employee ID"/>
                     </Column>
-                    <Column>
+                    <Column sortProperty="name">
                         <Text text="Full Name"/>
                     </Column>
-                    <Column>
+                    <Column sortProperty="department">
                         <Text text="Department"/>
                     </Column>
-                    <Column>
+                    <Column sortProperty="position">
                         <Text text="Position"/>
                     </Column>
-                    <Column>
+                    <Column sortProperty="email">
                         <Text text="Email"/>
                     </Column>
                     <Column>

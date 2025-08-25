@@ -31,7 +31,6 @@ A comprehensive employee directory application showcasing modern SAP Fiori devel
 | **Styling**      | SAP Fiori 3.0 Theme                       |
 | **Data Layer**   | JSON Model (Mock) → OData V2 (Production) |
 
-
 ## 📱 Application Flow
 
 ```mermaid
@@ -164,8 +163,7 @@ webapp/
 
 - [x] Export to Excel/PDF (Implemented: EmployeeList table can be exported to Excel and PDF)
 - [x] Bulk employee operations
-- [ ] Employee photo upload and avatar
-- [ ] Table pagination and sorting
+- [x] Table pagination and sorting
 
 ### Phase 3: Enterprise Features 📋
 
