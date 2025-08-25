@@ -51,7 +51,7 @@
 
             <!-- Enhanced Employee Table with MultiSelect -->
             <Table id="employeeTable" 
-                   items="{/employees}"
+                   items="{employees>/employees}"
                    growing="true"
                    growingScrollToLoad="true"
                    growingThreshold="10"
@@ -99,14 +99,14 @@
                 <items>
                     <ColumnListItem type="Navigation" press=".onItemPress">
                         <cells>
-                            <ObjectIdentifier title="{id}" />
-                            <Text text="{name}" />
-                            <ObjectStatus text="{department}" 
-                                         state="{path: 'department', formatter: '.formatDepartmentState'}" />
-                            <Text text="{position}" />
-                            <Link text="{email}" 
-                                  href="mailto:{email}"
-                                  enabled="{= ${email} !== '' }" />
+                            <ObjectIdentifier title="{employees>id}" />
+                            <Text text="{employees>name}" />
+                            <ObjectStatus text="{employees>department}" 
+                                         state="{path: 'employees>department', formatter: '.formatDepartmentState'}" />
+                            <Text text="{employees>position}" />
+                            <Link text="{employees>email}" 
+                                  href="mailto:{employees>email}"
+                                  enabled="{= ${employees>email} !== '' }" />
                             <HBox>
                                 <Button icon="sap-icon://edit" 
                                         type="Transparent" 
