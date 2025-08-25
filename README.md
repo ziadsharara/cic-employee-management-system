@@ -31,6 +31,22 @@ A comprehensive employee directory application showcasing modern SAP Fiori devel
 | **Styling**      | SAP Fiori 3.0 Theme                       |
 | **Data Layer**   | JSON Model (Mock) → OData V2 (Production) |
 
+
+## 📱 Application Flow
+
+```mermaid
+graph TD
+    A[Employee List] --> B[View Details]
+    A --> C[Add New Employee]
+    B --> D[Edit Employee]
+    B --> E[Delete Employee]
+    C --> F[Save New Employee]
+    D --> G[Update Employee]
+    F --> A
+    G --> A
+    E --> A
+```
+
 ## 🚀 Getting Started
 
 ### Prerequisites
