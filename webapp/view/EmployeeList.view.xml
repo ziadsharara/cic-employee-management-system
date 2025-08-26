@@ -1,0 +1,140 @@
+<mvc:View
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    controllerName="cic.cictrial.controller.EmployeeList">
+
+    <Page title="Employee Directory">
+        <headerContent>
+            <Button icon="sap-icon://add" text="Add Employee" press=".onAddEmployee" type="Emphasized" />
+        </headerContent>
+        
+        <content>
+            <!-- Search and Filter Panel -->
+            <Panel headerText="Search &amp; Filter" expanded="true" expandable="true" class="sapUiResponsiveMargin">
+                <content>
+                    <Toolbar>
+                        <SearchField id="searchField" 
+                            width="300px"
+                            placeholder="Search employees..." 
+                            search=".onSearch"
+                            liveChange=".onLiveSearch"/>
+                        <ToolbarSpacer />
+                        <Label text="Department:" />
+                        <Select id="departmentFilter" 
+                            width="150px"
+                            change=".onDepartmentFilter">
+                            <items>
+                                <core:Item key="" text="All Departments" />
+                                <core:Item key="IT" text="IT" />
+                                <core:Item key="HR" text="HR" />
+                                <core:Item key="Sales" text="Sales" />
+                                <core:Item key="Marketing" text="Marketing" />
+                                <core:Item key="Finance" text="Finance" />
+                                <core:Item key="Fiori" text="Fiori" />
+                            </items>
+                        </Select>
+                        <Button icon="sap-icon://clear-filter" 
+                            tooltip="Clear All Filters" 
+                            press=".onClearFilters" />
+                    </Toolbar>
+                </content>
+            </Panel>
+
+            <!-- ======================== BULK ACTION BUTTONS ======================== -->
+            <!-- Bulk Delete, Bulk Export to Excel, and Bulk Export to PDF Buttons for selected employees -->
+            <Toolbar>
+                <Button text="Delete Selected" type="Reject" press=".onBulkDelete" tooltip="Delete selected employees" />
+                <Button text="Export Selected to Excel" icon="sap-icon://excel-attachment" press=".onBulkExportExcel" tooltip="Export selected employees to Excel" />
+                <Button text="Export Selected to PDF" icon="sap-icon://pdf-attachment" press=".onBulkExportPDF" tooltip="Export selected employees to PDF" />
+            </Toolbar>
+
+            <!-- Enhanced Employee Table with MultiSelect -->
+            <Table id="employeeTable" 
+                   items="{employees>/employees}"
+                   growing="true"
+                   growingScrollToLoad="true"
+                   growingThreshold="10"
+                   selectionMode="MultiSelect"
+                   mode="MultiSelect">
+                <headerToolbar>
+                    <Toolbar>
+                        <Title text="Employees ({=${/employees}.length})" level="H2"/>
+                        <ToolbarSpacer />
+                        <Button icon="sap-icon://excel-attachment" 
+                                text="Export to Excel" 
+                                press=".onExportExcel"
+                                tooltip="Export to Excel" />
+                        <Button icon="sap-icon://pdf-attachment" 
+                                text="Export to PDF" 
+                                press=".onExportPDF"
+                                tooltip="Export to PDF" />
+                        <Button icon="sap-icon://refresh" 
+                                press=".onRefresh"
+                                tooltip="Refresh Data" />
+                    </Toolbar>
+                </headerToolbar>
+                
+                <columns>
+                    <Column sortProperty="id">
+                        <Text text="Employee ID"/>
+                    </Column>
+                    <Column sortProperty="name">
+                        <Text text="Full Name"/>
+                    </Column>
+                    <Column sortProperty="department">
+                        <Text text="Department"/>
+                    </Column>
+                    <Column sortProperty="position">
+                        <Text text="Position"/>
+                    </Column>
+                    <Column sortProperty="email">
+                        <Text text="Email"/>
+                    </Column>
+                    <Column>
+                        <Text text="Actions"/>
+                    </Column>
+                </columns>
+                
+                <items>
+                    <ColumnListItem type="Navigation" press=".onItemPress">
+                        <cells>
+                            <ObjectIdentifier title="{employees>id}" />
+                            <Text text="{employees>name}" />
+                            <ObjectStatus text="{employees>department}" 
+                                         state="{path: 'employees>department', formatter: '.formatDepartmentState'}" />
+                            <Text text="{employees>position}" />
+                            <Link text="{employees>email}" 
+                                  href="mailto:{employees>email}"
+                                  enabled="{= ${employees>email} !== '' }" />
+                            <HBox>
+                                <Button icon="sap-icon://edit" 
+                                        type="Transparent" 
+                                        press=".onQuickEdit"
+                                        tooltip="Quick Edit" />
+                                <Button icon="sap-icon://delete" 
+                                        type="Transparent" 
+                                        press=".onQuickDelete"
+                                        tooltip="Delete Employee" />
+                            </HBox>
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+
+            <!-- No Data Illustration -->
+            <IllustratedMessage id="noDataMessage"
+                               illustrationType="sapIllus-EmptyList"
+                               title="No Employees Found"
+                               description="Try adjusting your search or filter criteria"
+                               visible="false">
+                <additionalContent>
+                    <Button text="Add First Employee" 
+                           press=".onAddEmployee" 
+                           type="Emphasized" />
+                </additionalContent>
+            </IllustratedMessage>
+        </content>
+    </Page>
+</mvc:View>
+<!-- ======================== END BULK OPERATIONS FEATURE ======================== -->

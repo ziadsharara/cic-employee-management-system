@@ -1,0 +1,200 @@
+<mvc:View
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:form="sap.ui.layout.form"
+    xmlns:core="sap.ui.core"
+    controllerName="cic.cictrial.controller.EmployeeDetail">
+
+    <Page id="employeeDetailPage" title="Employee Details" showNavButton="true" navButtonPress=".onNavBack">
+        
+        <!-- Dynamic Header Actions based on Edit Mode -->
+        <headerContent>
+            <!-- View Mode Actions -->
+            <Button id="editButton" 
+                    icon="sap-icon://edit" 
+                    text="Edit" 
+                    press=".onEdit" 
+                    type="Emphasized"
+                    visible="{= !${viewModel>/editMode} }" />
+            <Button id="deleteButton" 
+                    icon="sap-icon://delete" 
+                    text="Delete" 
+                    press=".onDelete" 
+                    type="Reject"
+                    visible="{= !${viewModel>/editMode} }" />
+            
+            <!-- Edit Mode Actions -->
+            <Button id="saveButton" 
+                    icon="sap-icon://save" 
+                    text="Save" 
+                    press=".onSave" 
+                    type="Emphasized"
+                    visible="{viewModel>/editMode}" />
+            <Button id="cancelButton" 
+                    icon="sap-icon://cancel" 
+                    text="Cancel" 
+                    press=".onCancelEdit" 
+                    visible="{viewModel>/editMode}" />
+        </headerContent>
+
+        <content>
+            <!-- Employee Header with Photo -->
+            <ObjectHeader id="employeeHeader"
+                title="{employee>/name}"
+                number="{employee>/id}"
+                numberState="Success"
+                backgroundDesign="Solid"
+                condensed="false">
+                
+                <!-- Employee Photo -->
+                <attributes>
+                    <ObjectAttribute title="Department" text="{employee>/department}" />
+                    <ObjectAttribute title="Position" text="{employee>/position}" />
+                    <ObjectAttribute title="Employee ID" text="{employee>/id}" />
+                </attributes>
+
+                <!-- Photo Upload in Edit Mode -->
+                <headerContainer>
+                    <VBox alignItems="Center" class="sapUiSmallMargin">
+                        <Avatar id="employeeAvatar" 
+                                src="{employee>/photo}" 
+                                displaySize="L" 
+                                imageFitType="Cover"
+                                backgroundColor="Random"
+                                initials="{path: 'employee>/name', formatter: '.formatInitials'}"
+                                class="sapUiMediumMargin" />
+                        
+                        <!-- Photo Upload Button (Edit Mode Only) -->
+                        <Button text="Change Photo" 
+                                icon="sap-icon://camera"
+                                type="Transparent"
+                                visible="{viewModel>/editMode}"
+                                press=".onChangePhoto" />
+                    </VBox>
+                </headerContainer>
+            </ObjectHeader>
+
+            <!-- Employee Information Form -->
+            <Panel headerText="Employee Information" class="sapUiResponsiveMargin">
+                <content>
+                    <form:SimpleForm 
+                        editable="{viewModel>/editMode}"
+                        layout="ResponsiveGridLayout"
+                        labelSpanL="3" 
+                        labelSpanM="3" 
+                        emptySpanL="4" 
+                        emptySpanM="4"
+                        columnsL="1" 
+                        columnsM="1">
+                        
+                        <form:content>
+                            <!-- Employee ID (Read Only) -->
+                            <Label text="Employee ID:" />
+                            <Text text="{employee>/id}" />
+                            
+                            <!-- Full Name -->
+                            <Label text="Full Name:" />
+                            <Input value="{employee>/name}" 
+                                   editable="{viewModel>/editMode}"
+                                   valueState="{viewModel>/nameState}"
+                                   valueStateText="{viewModel>/nameStateText}"
+                                   liveChange=".onFieldChange" />
+                            
+                            <!-- Department -->
+                            <Label text="Department:" />
+                            <Select selectedKey="{employee>/department}"
+                                   enabled="{viewModel>/editMode}"
+                                   valueState="{viewModel>/departmentState}"
+                                   valueStateText="{viewModel>/departmentStateText}"
+                                   change=".onFieldChange">
+                                <items>
+                                    <core:Item key="IT" text="Information Technology" />
+                                    <core:Item key="HR" text="Human Resources" />
+                                    <core:Item key="Sales" text="Sales" />
+                                    <core:Item key="Marketing" text="Marketing" />
+                                    <core:Item key="Finance" text="Finance" />
+                                    <core:Item key="Fiori" text="Fiori Development" />
+                                </items>
+                            </Select>
+                            
+                            <!-- Position -->
+                            <Label text="Position:" />
+                            <Input value="{employee>/position}" 
+                                   editable="{viewModel>/editMode}"
+                                   placeholder="Enter job position" />
+                            
+                            <!-- Email -->
+                            <Label text="Email:" />
+                            <Input value="{employee>/email}" 
+                                   editable="{viewModel>/editMode}"
+                                   type="Email"
+                                   valueState="{viewModel>/emailState}"
+                                   valueStateText="{viewModel>/emailStateText}"
+                                   liveChange=".onFieldChange" />
+                            
+                            <!-- Phone (New Field) -->
+                            <Label text="Phone:" />
+                            <Input value="{employee>/phone}" 
+                                   editable="{viewModel>/editMode}"
+                                   type="Tel"
+                                   placeholder="+20 xxx xxx xxxx" />
+                            
+                            <!-- Hire Date (New Field) -->
+                            <Label text="Hire Date:" />
+                            <DatePicker value="{employee>/hireDate}" 
+                                       enabled="{viewModel>/editMode}"
+                                       displayFormat="dd/MM/yyyy"
+                                       valueFormat="yyyy-MM-dd" />
+                            
+                            <!-- Salary (New Field) -->
+                            <Label text="Salary:" />
+                            <Input value="{employee>/salary}" 
+                                   editable="{viewModel>/editMode}"
+                                   type="Number"
+                                   description="EGP" />
+                        </form:content>
+                    </form:SimpleForm>
+                </content>
+            </Panel>
+
+            <!-- Performance Metrics Panel (New) -->
+            <Panel headerText="Performance Overview" 
+                   expandable="true" 
+                   expanded="false"
+                   class="sapUiResponsiveMargin">
+                <content>
+                    <HBox class="sapUiMediumMargin">
+                        <VBox class="sapUiMediumMarginEnd">
+                            <Label text="Years of Service:" />
+                            <ObjectNumber number="{path: 'employee>/hireDate', formatter: '.formatYearsOfService'}" 
+                                         unit="years"
+                                         state="Success" />
+                        </VBox>
+                        <VBox class="sapUiMediumMarginEnd">
+                            <Label text="Performance Rating:" />
+                            <RatingIndicator value="{employee>/rating}" 
+                                           maxValue="5" 
+                                           enabled="{viewModel>/editMode}"
+                                           change=".onRatingChange" />
+                        </VBox>
+                        <VBox>
+                            <Label text="Status:" />
+                            <ObjectStatus text="{employee>/status}" 
+                                         state="{path: 'employee>/status', formatter: '.formatStatusState'}" />
+                        </VBox>
+                    </HBox>
+                </content>
+            </Panel>
+
+            <!-- Validation Messages Panel -->
+            <Panel headerText="Validation Messages" 
+                   visible="{viewModel>/hasValidationErrors}" 
+                   class="sapUiResponsiveMargin">
+                <content>
+                    <MessageStrip text="{viewModel>/validationMessage}" 
+                                 type="Error" />
+                </content>
+            </Panel>
+        </content>
+    </Page>ش
+</mvc:View>
