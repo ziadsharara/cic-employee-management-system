@@ -13,12 +13,6 @@ sap.ui.define(
       onInit: function () {
         // Initialize empty form model
         this._initializeFormModel();
-        var oModel = this.getView().getModel();
-        if (!oModel) {
-          sap.m.MessageToast.show('Form model not initialized!');
-        } else {
-          sap.m.MessageToast.show('EmployeeCreate controller loaded.');
-        }
         console.log('EmployeeCreate controller initialized');
       },
 
@@ -40,6 +34,8 @@ sap.ui.define(
           nameStateText: '',
           departmentState: 'None',
           departmentStateText: '',
+          emailState: 'None',
+          emailStateText: '',
 
           // General validation messages
           hasValidationErrors: false,
@@ -53,78 +49,159 @@ sap.ui.define(
       /**
        * Validate form data on input change
        */
-      onInputChange: function () {
-        this._validateForm();
+      onInputChange: function (oEvent) {
+        var sControlId = oEvent.getSource().getId();
+        this._validateField(sControlId);
       },
 
       /**
-       * Validate all required fields
-       * @returns {boolean} true if data is valid
+       * Validate specific field
        */
-      _validateForm: function () {
+      _validateField: function (sControlId) {
+        var oModel = this.getView().getModel();
+        var oData = oModel.getData();
+
+        if (sControlId.includes('employeeIdInput')) {
+          this._validateEmployeeId(oData.id);
+        } else if (sControlId.includes('employeeNameInput')) {
+          this._validateName(oData.name);
+        } else if (sControlId.includes('departmentSelect')) {
+          this._validateDepartment(oData.department);
+        } else if (sControlId.includes('emailInput')) {
+          this._validateEmail(oData.email);
+        }
+
+        this._updateValidationStatus();
+      },
+
+      /**
+       * Validate Employee ID
+       */
+      _validateEmployeeId: function (sId) {
+        var oModel = this.getView().getModel();
+        var oData = oModel.getData();
+
+        if (!sId || sId.trim() === '') {
+          oData.idState = 'Error';
+          oData.idStateText = 'Employee ID is required';
+        } else if (this._isEmployeeIdExists(sId)) {
+          oData.idState = 'Error';
+          oData.idStateText = 'Employee ID already exists';
+        } else {
+          oData.idState = 'Success';
+          oData.idStateText = '';
+        }
+
+        oModel.setData(oData);
+      },
+
+      /**
+       * Validate Name
+       */
+      _validateName: function (sName) {
+        var oModel = this.getView().getModel();
+        var oData = oModel.getData();
+
+        if (!sName || sName.trim() === '') {
+          oData.nameState = 'Error';
+          oData.nameStateText = 'Full Name is required';
+        } else {
+          oData.nameState = 'Success';
+          oData.nameStateText = '';
+        }
+
+        oModel.setData(oData);
+      },
+
+      /**
+       * Validate Department
+       */
+      _validateDepartment: function (sDepartment) {
+        var oModel = this.getView().getModel();
+        var oData = oModel.getData();
+
+        if (!sDepartment || sDepartment === '') {
+          oData.departmentState = 'Error';
+          oData.departmentStateText = 'Please select a department';
+        } else {
+          oData.departmentState = 'Success';
+          oData.departmentStateText = '';
+        }
+
+        oModel.setData(oData);
+      },
+
+      /**
+       * Validate Email
+       */
+      _validateEmail: function (sEmail) {
+        var oModel = this.getView().getModel();
+        var oData = oModel.getData();
+
+        if (!sEmail || sEmail.trim() === '') {
+          oData.emailState = 'Error';
+          oData.emailStateText = 'Email is required';
+        } else if (!this._isValidEmail(sEmail)) {
+          oData.emailState = 'Error';
+          oData.emailStateText = 'Please enter a valid email address';
+        } else {
+          oData.emailState = 'Success';
+          oData.emailStateText = '';
+        }
+
+        oModel.setData(oData);
+      },
+
+      /**
+       * Check if email is valid
+       */
+      _isValidEmail: function (sEmail) {
+        var oRegExp = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return oRegExp.test(sEmail);
+      },
+
+      /**
+       * Update overall validation status
+       */
+      _updateValidationStatus: function () {
         var oModel = this.getView().getModel();
         var oData = oModel.getData();
         var bIsValid = true;
         var aErrors = [];
 
-        // Reset validation states
-        oData.idState = 'None';
-        oData.idStateText = '';
-        oData.nameState = 'None';
-        oData.nameStateText = '';
-        oData.departmentState = 'None';
-        oData.departmentStateText = '';
-
-        // Validate Employee ID
-        if (!oData.id || oData.id.trim() === '') {
-          oData.idState = 'Error';
-          oData.idStateText = 'Employee ID is required';
-          aErrors.push('Employee ID is required');
+        if (oData.idState === 'Error') {
+          aErrors.push(oData.idStateText);
           bIsValid = false;
-        } else if (this._isEmployeeIdExists(oData.id)) {
-          oData.idState = 'Error';
-          oData.idStateText = 'Employee ID already exists';
-          aErrors.push('Employee ID already exists');
+        }
+        if (oData.nameState === 'Error') {
+          aErrors.push(oData.nameStateText);
+          bIsValid = false;
+        }
+        if (oData.departmentState === 'Error') {
+          aErrors.push(oData.departmentStateText);
+          bIsValid = false;
+        }
+        if (oData.emailState === 'Error') {
+          aErrors.push(oData.emailStateText);
           bIsValid = false;
         }
 
-        // Validate name
-        if (!oData.name || oData.name.trim() === '') {
-          oData.nameState = 'Error';
-          oData.nameStateText = 'Full Name is required';
-          aErrors.push('Full Name is required');
-          bIsValid = false;
-        }
-
-        // Validate department
-        if (!oData.department || oData.department === '') {
-          oData.departmentState = 'Error';
-          oData.departmentStateText = 'Please select a department';
-          aErrors.push('Department selection is required');
-          bIsValid = false;
-        }
-
-        // Update validation messages
         oData.hasValidationErrors = !bIsValid;
         oData.validationMessage = bIsValid
           ? ''
           : 'Please fix the following errors: ' + aErrors.join(', ');
 
         oModel.setData(oData);
-        return bIsValid;
       },
 
       /**
        * Check if Employee ID already exists
-       * @param {string} sEmployeeId - Employee ID to check
-       * @returns {boolean} true if ID exists
        */
       _isEmployeeIdExists: function (sEmployeeId) {
-        var oMainModel = this.getOwnerComponent().getModel();
+        var oMainModel = this.getOwnerComponent().getModel('employees');
         if (!oMainModel) return false;
 
         var aEmployees = oMainModel.getProperty('/employees') || [];
-
         return aEmployees.some(function (emp) {
           return emp.id === sEmployeeId;
         });
@@ -134,21 +211,28 @@ sap.ui.define(
        * Save new employee
        */
       onSave: function () {
-        if (!this._validateForm()) {
+        // Validate all fields before saving
+        var oModel = this.getView().getModel();
+        var oData = oModel.getData();
+
+        this._validateEmployeeId(oData.id);
+        this._validateName(oData.name);
+        this._validateDepartment(oData.department);
+        this._validateEmail(oData.email);
+        this._updateValidationStatus();
+
+        if (oData.hasValidationErrors) {
           MessageToast.show('Please fix validation errors before saving');
           return;
         }
 
-        var oModel = this.getView().getModel();
-        var oFormData = oModel.getData();
-
         // Create new employee object
         var oNewEmployee = {
-          id: oFormData.id.trim(),
-          name: oFormData.name.trim(),
-          department: oFormData.department,
-          position: oFormData.position ? oFormData.position.trim() : '',
-          email: oFormData.email ? oFormData.email.trim() : '',
+          id: oData.id.trim(),
+          name: oData.name.trim(),
+          department: oData.department,
+          position: oData.position ? oData.position.trim() : '',
+          email: oData.email ? oData.email.trim() : '',
         };
 
         // Add employee to main list
@@ -157,10 +241,9 @@ sap.ui.define(
 
       /**
        * Add new employee to main list
-       * @param {object} oNewEmployee - New employee data
        */
       _addEmployeeToList: function (oNewEmployee) {
-        var oMainModel = this.getOwnerComponent().getModel();
+        var oMainModel = this.getOwnerComponent().getModel('employees');
         var aEmployees = oMainModel.getProperty('/employees') || [];
 
         // Add new employee
@@ -176,7 +259,7 @@ sap.ui.define(
         this._initializeFormModel();
 
         // Go back to employee list
-        this.onNavBack();
+        this._navigateBack();
       },
 
       /**
