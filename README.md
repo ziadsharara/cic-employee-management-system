@@ -146,7 +146,7 @@ webapp/
 
 | Feature                | Screenshot                                           |
 | ---------------------- | ---------------------------------------------------- |
-| Employee List          | ![List View](docs/screenshots/employee-list.png)     |
+| Employee List          | ![List View](docs/screenshots/employees-list.png)     |
 | Employee Details       | ![Detail View](docs/screenshots/employee-detail.png) |
 | Create Employee        | ![Create Form](docs/screenshots/employee-create.png) |
 | Exported Data to Excel | ![Excel](docs/screenshots/excel.png)                 |
