@@ -14,6 +14,7 @@ sap.ui.define(
       },
 
       init: function () {
+<<<<<<< HEAD
         // call the base component's init function
         UIComponent.prototype.init.apply(this, arguments);
 
@@ -32,6 +33,37 @@ sap.ui.define(
         this.setModel(oStatistics, 'statistics');
 
         // enable routing
+=======
+        UIComponent.prototype.init.apply(this, arguments);
+
+        // device model
+        this.setModel(models.createDeviceModel(), 'device');
+
+        // employees model - FIXED STRUCTURE
+        var oEmployeesModel = new JSONModel({
+          employees: [], // Make sure the model has an "employees" array property
+        });
+        this.setModel(oEmployeesModel, 'employees');
+
+        // Load employees data
+        try {
+          oEmployeesModel.loadData(
+            sap.ui.require.toUrl('cic/cictrial/model/employees.json'),
+            null,
+            false
+          );
+        } catch (e) {
+          console.log(
+            'Could not load employees.json, starting with empty model',
+            e
+          );
+        }
+
+        // statistics model
+        this.setModel(new JSONModel({}), 'statistics');
+
+        // routing
+>>>>>>> master
         this.getRouter().initialize();
       },
     });
