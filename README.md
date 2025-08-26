@@ -144,13 +144,6 @@ webapp/
 
 ## 📊 Screenshots
 
-<<<<<<< HEAD
-| Feature          | Screenshot                                           |
-| ---------------- | ---------------------------------------------------- |
-| Employee List    | ![List View](docs/screenshots/employee-list.png)     |
-| Employee Details | ![Detail View](docs/screenshots/employee-detail.png) |
-| Create Employee  | ![Create Form](docs/screenshots/employee-create.png) |
-=======
 | Feature                | Screenshot                                           |
 | ---------------------- | ---------------------------------------------------- |
 | Employee List          | ![List View](docs/screenshots/employee-list.png)     |
@@ -158,7 +151,6 @@ webapp/
 | Create Employee        | ![Create Form](docs/screenshots/employee-create.png) |
 | Exported Data to Excel | ![Excel](docs/screenshots/excel.png)                 |
 | Exported Data to PDF   | ![PDF](docs/screenshots/pdf.png)                     |
->>>>>>> master
 
 ## 🔄 Development Roadmap
 

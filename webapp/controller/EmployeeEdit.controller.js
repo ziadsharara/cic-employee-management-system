@@ -16,18 +16,9 @@ sap.ui.define(
           .attachPatternMatched(this._onObjectMatched, this);
       },
 
-<<<<<<< HEAD
-      /**
-       * Load employee data based on route parameter
-       */
-      _onObjectMatched: function (oEvent) {
-        var sEmployeeId = oEvent.getParameter('arguments').EmployeeID;
-        var oMainModel = this.getOwnerComponent().getModel();
-=======
       _onObjectMatched: function (oEvent) {
         var sEmployeeId = oEvent.getParameter('arguments').EmployeeID;
         var oMainModel = this.getOwnerComponent().getModel('employees');
->>>>>>> master
         var aEmployees = oMainModel.getProperty('/employees') || [];
 
         var oEmployee = aEmployees.find(function (emp) {
@@ -37,13 +28,8 @@ sap.ui.define(
         if (oEmployee) {
           var oEditModel = new JSONModel({
             id: oEmployee.id,
-<<<<<<< HEAD
-            name: oEmployee.name,
-            department: oEmployee.department,
-=======
             name: oEmployee.name || '',
             department: oEmployee.department || '',
->>>>>>> master
             position: oEmployee.position || '',
             email: oEmployee.email || '',
             hasValidationErrors: false,
@@ -56,12 +42,6 @@ sap.ui.define(
         }
       },
 
-<<<<<<< HEAD
-      /**
-       * Validate form
-       */
-=======
->>>>>>> master
       _validateForm: function () {
         var oModel = this.getView().getModel('edit');
         var oData = oModel.getData();
@@ -89,12 +69,6 @@ sap.ui.define(
         this._validateForm();
       },
 
-<<<<<<< HEAD
-      /**
-       * Save updated employee
-       */
-=======
->>>>>>> master
       onSave: function () {
         if (!this._validateForm()) {
           MessageToast.show('Please fix validation errors before saving');
@@ -104,11 +78,7 @@ sap.ui.define(
         var oEditModel = this.getView().getModel('edit');
         var oData = oEditModel.getData();
 
-<<<<<<< HEAD
-        var oMainModel = this.getOwnerComponent().getModel();
-=======
         var oMainModel = this.getOwnerComponent().getModel('employees');
->>>>>>> master
         var aEmployees = oMainModel.getProperty('/employees') || [];
 
         var iIndex = aEmployees.findIndex(function (emp) {
@@ -125,10 +95,7 @@ sap.ui.define(
           };
 
           oMainModel.setProperty('/employees', aEmployees);
-<<<<<<< HEAD
-=======
           oMainModel.refresh();
->>>>>>> master
           MessageToast.show('Employee updated successfully!');
           this.onNavBack();
         } else {
@@ -136,12 +103,6 @@ sap.ui.define(
         }
       },
 
-<<<<<<< HEAD
-      /**
-       * Cancel and navigate back
-       */
-=======
->>>>>>> master
       onNavBack: function () {
         var oRouter = this.getOwnerComponent().getRouter();
         oRouter.navTo('EmployeeList');

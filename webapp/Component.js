@@ -14,38 +14,19 @@ sap.ui.define(
       },
 
       init: function () {
-<<<<<<< HEAD
         // call the base component's init function
         UIComponent.prototype.init.apply(this, arguments);
 
         // set the device model
         this.setModel(models.createDeviceModel(), 'device');
 
-        // Create and set the employees data model
-        var oEmployees = new JSONModel();
-        oEmployees.loadData(
-          sap.ui.require.toUrl('cic/cictrial/model/employees.json')
-        );
-        this.setModel(oEmployees, 'employees');
-
-        // Create and set an empty statistics model
-        var oStatistics = new JSONModel({});
-        this.setModel(oStatistics, 'statistics');
-
-        // enable routing
-=======
-        UIComponent.prototype.init.apply(this, arguments);
-
-        // device model
-        this.setModel(models.createDeviceModel(), 'device');
-
-        // employees model - FIXED STRUCTURE
+        // Create and set the employees data model with proper structure
         var oEmployeesModel = new JSONModel({
-          employees: [], // Make sure the model has an "employees" array property
+          employees: [], // Ensure the model has an "employees" array property
         });
         this.setModel(oEmployeesModel, 'employees');
 
-        // Load employees data
+        // Load employees data with error handling
         try {
           oEmployeesModel.loadData(
             sap.ui.require.toUrl('cic/cictrial/model/employees.json'),
@@ -59,11 +40,11 @@ sap.ui.define(
           );
         }
 
-        // statistics model
-        this.setModel(new JSONModel({}), 'statistics');
+        // Create and set an empty statistics model
+        var oStatistics = new JSONModel({});
+        this.setModel(oStatistics, 'statistics');
 
-        // routing
->>>>>>> master
+        // enable routing
         this.getRouter().initialize();
       },
     });
